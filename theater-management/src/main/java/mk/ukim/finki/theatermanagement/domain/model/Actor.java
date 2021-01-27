@@ -2,6 +2,7 @@ package mk.ukim.finki.theatermanagement.domain.model;
 
 import lombok.Getter;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
+import mk.ukim.finki.sharedkernel.domain.name.FullName;
 
 import javax.persistence.*;
 

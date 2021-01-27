@@ -10,4 +10,9 @@ public class UserId extends DomainObjectId {
     public UserId(String id) {
         super(id);
     }
+
+    @SuppressWarnings("unused")
+    protected UserId() {
+        super("");
+    }
 }

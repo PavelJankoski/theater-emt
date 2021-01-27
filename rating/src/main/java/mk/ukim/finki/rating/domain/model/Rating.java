@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "rating")
+@Table(name = "ratings")
 public class Rating extends AbstractEntity<RatingId> {
 
     @EmbeddedId

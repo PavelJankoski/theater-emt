@@ -1,4 +1,4 @@
-package mk.ukim.finki.theatermanagement.domain.model;
+package mk.ukim.finki.sharedkernel.domain.name;
 
 import lombok.Getter;
 import mk.ukim.finki.sharedkernel.domain.base.ValueObject;
