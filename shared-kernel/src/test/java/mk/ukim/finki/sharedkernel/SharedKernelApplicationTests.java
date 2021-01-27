@@ -1,10 +1,10 @@
-package mk.ukim.finki.sharekernel;
+package mk.ukim.finki.sharedkernel;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ShareKernelApplicationTests {
+class SharedKernelApplicationTests {
 
     @Test
     void contextLoads() {
