@@ -13,6 +13,8 @@
         <module>theater-management</module>
         <module>user-management</module>
         <module>shared-kernel</module>
+        <module>reservation</module>
+        <module>rating</module>
     </modules>
 
 
