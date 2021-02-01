@@ -29,7 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
     public List<Reservation> createReservations(@Payload ReservationSeatsForShowDTO dto) {
         List<Reservation> reservations = new ArrayList<>();
         for(String seatId : dto.getSeatIds()) {
-            Reservation reservation = new Reservation(null, new ShowId(dto.getShowId()), new SeatId(seatId));
+            Reservation reservation = new Reservation(null, new ShowId(dto.getShowId()), new SeatId(seatId),dto.getPrice());
             reservations.add(reservation);
         }
         return repository.saveAll(reservations);

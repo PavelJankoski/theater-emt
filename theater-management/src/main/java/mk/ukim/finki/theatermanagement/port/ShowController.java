@@ -21,8 +21,9 @@ public class ShowController {
 
     @PostMapping("/create")
     public ResponseEntity<Show> createShow(@RequestBody Show show) {
-        Scene s = sceneRepository.findById(new SceneId("b10fd73c-5655-47d5-8e12-57d396576f94")).orElseThrow(RuntimeException::new);
+        Scene s = sceneRepository.findById(new SceneId("70ea695b-0bcf-48c2-9390-dcda278e0854")).orElseThrow(RuntimeException::new);
         show.setScene(s);
         return ResponseEntity.ok().body(this.showService.createShow(show));
     }
+
 }

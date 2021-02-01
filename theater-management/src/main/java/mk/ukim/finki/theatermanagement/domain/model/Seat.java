@@ -3,6 +3,7 @@ package mk.ukim.finki.theatermanagement.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
+import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 import mk.ukim.finki.sharedkernel.domain.financial.Money;
 
 import javax.persistence.*;
@@ -28,11 +29,10 @@ public class Seat extends AbstractEntity<SeatId> {
     @JsonIgnore
     private Scene scene;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "price")),
-            @AttributeOverride(name = "currency", column = @Column(name = "currency"))
-    })
-    private Money price;
+   
+    
+    public Seat(){
+        this.id= DomainObjectId.randomId(SeatId.class);
+    }
 
 }

@@ -2,6 +2,7 @@ package mk.ukim.finki.theatermanagement.domain.model;
 
 import lombok.Getter;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
+import mk.ukim.finki.sharedkernel.domain.financial.Money;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -46,6 +47,14 @@ public class Show extends AbstractEntity<ShowId> {
     @JoinColumn(name = "scene_id")
     private Scene scene;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "price")),
+            @AttributeOverride(name = "currency", column = @Column(name = "currency"))
+    })
+    private Money ticketPrice;
+    
+    
     public void setScene(Scene scene) {
         this.scene = scene;
     }

@@ -9,6 +9,7 @@ import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "scenes")
@@ -39,6 +40,11 @@ public class Scene extends AbstractEntity<SceneId> {
         this.name = name;
         this.capacity = capacity;
         this.seatsInRow = seatsInRow;
+    }
+
+
+    public void setId(SceneId id) {
+        this.id = id;
     }
 
     public Scene createScene(String name, int capacity, int seatsInRow){

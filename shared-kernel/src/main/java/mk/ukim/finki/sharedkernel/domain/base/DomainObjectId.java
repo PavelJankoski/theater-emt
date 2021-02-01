@@ -5,12 +5,14 @@ import lombok.Getter;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
 @Getter
 public class DomainObjectId implements ValueObject{
+
 
     private String id;
 

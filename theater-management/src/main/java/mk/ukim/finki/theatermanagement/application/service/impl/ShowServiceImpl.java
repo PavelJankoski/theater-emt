@@ -3,9 +3,12 @@ package mk.ukim.finki.theatermanagement.application.service.impl;
 import mk.ukim.finki.sharedkernel.config.KafkaTopics;
 import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 import mk.ukim.finki.sharedkernel.domain.dto.kafka.ReservationSeatsForShowDTO;
+import mk.ukim.finki.sharedkernel.domain.dto.kafka.SceneSeatsDTO;
 import mk.ukim.finki.theatermanagement.application.service.ShowService;
+import mk.ukim.finki.theatermanagement.domain.model.Scene;
 import mk.ukim.finki.theatermanagement.domain.model.Show;
 import mk.ukim.finki.theatermanagement.domain.model.ShowId;
+import mk.ukim.finki.theatermanagement.domain.repository.SceneRepository;
 import mk.ukim.finki.theatermanagement.domain.repository.ShowRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -30,9 +33,10 @@ public class ShowServiceImpl implements ShowService {
     public Show createShow(Show show) {
         List<String> seatIds = show.getScene().getSeats().stream().map(s -> s.getId().getId()).collect(Collectors.toList());
         show.setId(DomainObjectId.randomId(ShowId.class));
-        ReservationSeatsForShowDTO dto = new ReservationSeatsForShowDTO(show.getId().getId(), seatIds);
+        ReservationSeatsForShowDTO dto = new ReservationSeatsForShowDTO(show.getId().getId(), seatIds,show.getTicketPrice());
         showRepository.saveAndFlush(show);
         kafkaTemplate.send(KafkaTopics.RESERVATION_SEATS_FOR_SHOW, dto);
         return show;
     }
+
 }

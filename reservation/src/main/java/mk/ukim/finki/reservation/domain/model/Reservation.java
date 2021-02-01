@@ -41,14 +41,22 @@ public class Reservation extends AbstractEntity<ReservationId> {
     @AttributeOverride(name="id",column = @Column(name="seat_id",nullable = false))
     private SeatId seatId;
 
-
-    public Reservation(UserId userId, ShowId showId, SeatId seatId) {
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "price")),
+            @AttributeOverride(name = "currency", column = @Column(name = "currency"))
+    })
+    private Money price;
+    
+    
+    public Reservation(UserId userId, ShowId showId, SeatId seatId,Money price) {
         this.id = DomainObjectId.randomId(ReservationId.class);
         this.userId = userId;
         this.showId = showId;
         this.seatId = seatId;
         this.reservatedOn = Instant.now();
         this.status = ReservationStatus.NOT_RESERVED;
+        this.price=price;
     }
 }
 

@@ -10,7 +10,13 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaTopicConfiguration {
 
     @Bean
-    public NewTopic topicExample() {
+    public NewTopic reservationTopic() {
         return TopicBuilder.name(KafkaTopics.RESERVATION_SEATS_FOR_SHOW).build();
     }
+
+    @Bean
+    public NewTopic sceneTopic() {
+        return TopicBuilder.name(KafkaTopics.SCENE_SEATS).build();
+    }
+
 }

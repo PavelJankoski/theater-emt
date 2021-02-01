@@ -2,6 +2,8 @@ package mk.ukim.finki.theatermanagement.config.kafka;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import mk.ukim.finki.sharedkernel.domain.dto.kafka.ReservationSeatsForShowDTO;
+import mk.ukim.finki.sharedkernel.domain.dto.kafka.SceneSeatsDTO;
+import mk.ukim.finki.theatermanagement.domain.model.Scene;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +35,18 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    public  ProducerFactory<String, Scene> producerFactoryScene(){
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
     public KafkaTemplate<String, ReservationSeatsForShowDTO> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String,Scene> kafkaTemplateScene(){
+        return new KafkaTemplate<>(producerFactoryScene());
     }
 
 }
