@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
+import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -27,13 +28,14 @@ public class Scene extends AbstractEntity<SceneId> {
     private int seatsInRow;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Show> shows = new HashSet<>();
 
-    @OneToMany(mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Seat> seats = new HashSet<>();
 
     private Scene(String name, int capacity, int seatsInRow){
+        this.id = DomainObjectId.randomId(SceneId.class);
         this.name = name;
         this.capacity = capacity;
         this.seatsInRow = seatsInRow;

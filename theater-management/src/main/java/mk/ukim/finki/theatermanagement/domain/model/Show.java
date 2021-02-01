@@ -45,4 +45,12 @@ public class Show extends AbstractEntity<ShowId> {
     @ManyToOne
     @JoinColumn(name = "scene_id")
     private Scene scene;
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    public void setId(ShowId id) {
+        this.id = id;
+    }
 }

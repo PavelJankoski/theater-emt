@@ -30,7 +30,7 @@ public class Reservation extends AbstractEntity<ReservationId> {
     private ReservationStatus status;
 
     @Embedded
-    @AttributeOverride(name="id",column = @Column(name="user_id",nullable = false))
+    @AttributeOverride(name="id",column = @Column(name="user_id"))
     private UserId userId;
 
     @Embedded
@@ -43,11 +43,12 @@ public class Reservation extends AbstractEntity<ReservationId> {
 
 
     public Reservation(UserId userId, ShowId showId, SeatId seatId) {
-        super(DomainObjectId.randomId(ReservationId.class));
+        this.id = DomainObjectId.randomId(ReservationId.class);
         this.userId = userId;
         this.showId = showId;
         this.seatId = seatId;
         this.reservatedOn = Instant.now();
+        this.status = ReservationStatus.NOT_RESERVED;
     }
 }
 
