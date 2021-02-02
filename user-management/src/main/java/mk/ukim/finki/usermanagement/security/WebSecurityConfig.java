@@ -61,8 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user-api/auth/**").permitAll()
                 .antMatchers("/rating-api/**").permitAll()
-                .antMatchers("/theater-api/shows/create").hasRole("ADMIN")
-                .antMatchers("/theater-api/scene/create").permitAll()
+                .antMatchers("/theater-api/shows/all/**").permitAll()
+                .antMatchers("/theater-api/shows/admin/**").hasRole("ADMIN")
+                .antMatchers("/theater-api/scene/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

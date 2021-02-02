@@ -9,6 +9,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,30 +21,30 @@ public class SeatServiceImpl implements SeatService {
         this.seatRepository = seatRepository;
     }
 
+
     @KafkaListener(topics = KafkaTopics.SCENE_SEATS,
             groupId = "scene_group",
             containerFactory = "sceneKafkaListenerContainerFactory")
     @Override
     public List<Seat> createSeatsForScene(@Payload Scene scene) {
+        List<Seat> seats = new ArrayList<>();
+        for(int i = 1;i<scene.getCapacity()+1;i++){
+            Seat seat = new Seat();
+            if(i%scene.getSeatsInRow()!=0){
+                seat.setSeatNo(i%scene.getSeatsInRow());
+                seat.setSeatRow(((i/scene.getSeatsInRow()) + 1));
+            }
+            else{
+                seat.setSeatNo(scene.getSeatsInRow());
+                seat.setSeatRow((i/scene.getSeatsInRow()));
+            }
 
-//        for(int i = 1;i<scene.getCapacity()+1;i++){
-//            Seat seat = new Seat();
-//            if(i%scene.getSeatsInRow()!=0){
-//                seat.setSeatNo(i%seatsInRow);
-//                seat.setSeatRow(((i/seatsInRow) + 1));
-//            }
-//            else{
-//                seat.setSeatNo(seatsInRow);
-//                seat.setSeatRow((i/seatsInRow));
-//            }
-//
-//            seat.setTheScene(scene);
-//            scene.getSeats().add(seat);
-//
-//        }
-//        return this.sceneRepository.save(scene);
-//    }
-        return null;
+            seat.setScene(scene);
+            seats.add(seat);
+
+        }
+        return this.seatRepository.saveAll(seats);
+
     }
 
 }

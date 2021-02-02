@@ -1,6 +1,7 @@
 package mk.ukim.finki.theatermanagement.domain.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
 import mk.ukim.finki.sharedkernel.domain.financial.Money;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "shows")
 @Getter
+@Setter
 public class Show extends AbstractEntity<ShowId> {
     @EmbeddedId
     private ShowId id;
@@ -37,14 +39,16 @@ public class Show extends AbstractEntity<ShowId> {
     @Column(nullable = false)
     private int duration;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
     @Lob
     private byte[] image;
 
-    @ManyToMany(targetEntity = Actor.class)
+    @ManyToMany(targetEntity = Actor.class, fetch = FetchType.EAGER)
     Set<Actor> actors = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "scene_id")
     private Scene scene;
 
     @Embedded
@@ -53,13 +57,8 @@ public class Show extends AbstractEntity<ShowId> {
             @AttributeOverride(name = "currency", column = @Column(name = "currency"))
     })
     private Money ticketPrice;
-    
-    
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
 
-    public void setId(ShowId id) {
-        this.id = id;
-    }
+
+    
+
 }

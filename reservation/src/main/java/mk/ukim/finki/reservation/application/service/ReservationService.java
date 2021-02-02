@@ -7,5 +7,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import java.util.List;
 
 public interface ReservationService {
-    public List<Reservation> createReservations(@Payload ReservationSeatsForShowDTO dto);
+    List<Reservation> createReservations(@Payload ReservationSeatsForShowDTO dto);
+
+    void deleteReservationsForShow(String id);
 }

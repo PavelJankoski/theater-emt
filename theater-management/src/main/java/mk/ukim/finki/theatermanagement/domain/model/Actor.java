@@ -17,6 +17,9 @@ public class Actor extends AbstractEntity<ActorId> {
     @Version
     private Long version;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "firstName", column = @Column(name = "first_name", nullable = false)),

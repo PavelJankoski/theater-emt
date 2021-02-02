@@ -19,4 +19,10 @@ public class KafkaTopicConfiguration {
         return TopicBuilder.name(KafkaTopics.SCENE_SEATS).build();
     }
 
+    @Bean
+    public NewTopic showDeletedTopic() {
+        return TopicBuilder.name(KafkaTopics.DELETE_SHOW).build();
+    }
+
+
 }

@@ -18,7 +18,7 @@ public class SceneController {
         this.sceneService = sceneService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     public ResponseEntity<Scene> createScene(@RequestBody Scene scene){
         return ResponseEntity.ok().body(this.sceneService.createScene(scene));
     }

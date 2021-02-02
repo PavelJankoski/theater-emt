@@ -34,4 +34,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return repository.saveAll(reservations);
     }
+
+    @KafkaListener(topics = KafkaTopics.DELETE_SHOW,
+            groupId = "delete_show_group",
+            containerFactory = "deleteShowKafkaListenerContainerFactory")
+    @Override
+    public void deleteReservationsForShow(String id) {
+        this.repository.deleteAll(this.repository.findAllByShowId(new ShowId(id)));
+    }
+
+
 }

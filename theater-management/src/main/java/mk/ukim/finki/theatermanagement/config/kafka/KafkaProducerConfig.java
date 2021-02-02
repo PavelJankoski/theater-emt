@@ -29,13 +29,9 @@ public class KafkaProducerConfig {
         return props;
     }
 
+    //Create reservations when show is created
     @Bean
     public ProducerFactory<String, ReservationSeatsForShowDTO> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
-    }
-
-    @Bean
-    public  ProducerFactory<String, Scene> producerFactoryScene(){
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
@@ -44,9 +40,30 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
+
+    //Create seats when scene is created
+    @Bean
+    public  ProducerFactory<String, Scene> producerFactoryScene(){
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
     @Bean
     public KafkaTemplate<String,Scene> kafkaTemplateScene(){
         return new KafkaTemplate<>(producerFactoryScene());
+    }
+
+
+    //Delete all reservations when show is deleted
+    @Bean
+    public  ProducerFactory<String, String> producerFactoryDeleteShow(){
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplateDeleteShow(){
+        return new KafkaTemplate<>(producerFactoryDeleteShow());
     }
 
 }
