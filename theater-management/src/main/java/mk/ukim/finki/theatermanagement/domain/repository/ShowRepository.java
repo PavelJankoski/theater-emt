@@ -12,6 +12,6 @@ import java.util.List;
 public interface ShowRepository extends PagingAndSortingRepository<Show, ShowId> {
     List<Show> findAllByIsDeletedOrderByFrom(Boolean isDeleted);
 
-    List<Show> findByTitleOrDescriptionContainingIgnoreCaseAndIsDeletedFalseOrderByFrom(String title, String description);
+    List<Show> findByTitleContainingIgnoreCaseAndIsDeletedFalseOrderByFrom(String title);
 
 }

@@ -50,7 +50,7 @@ public class ShowServiceImpl implements ShowService {
 
     @Override
     public List<Show> searchShow(String term) {
-        return this.showRepository.findByTitleOrDescriptionContainingIgnoreCaseAndIsDeletedFalseOrderByFrom(term, term);
+        return this.showRepository.findByTitleContainingIgnoreCaseAndIsDeletedFalseOrderByFrom(term);
     }
 
     @Transactional
