@@ -7,9 +7,11 @@ import mk.ukim.finki.theatermanagement.domain.model.SceneId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/scene")
+@RequestMapping("/scenes")
 public class SceneController {
 
     private final SceneService sceneService;
@@ -18,7 +20,17 @@ public class SceneController {
         this.sceneService = sceneService;
     }
 
-    @PostMapping("/admin/create")
+    @GetMapping
+    public ResponseEntity<List<Scene>> getAllScenes() {
+        return ResponseEntity.ok().body(this.sceneService.findAll());
+    }
+
+    @GetMapping("/{sceneId}")
+    public ResponseEntity<Scene> getSceneById(@PathVariable String sceneId) {
+        return ResponseEntity.ok().body(this.sceneService.findById(sceneId));
+    }
+
+    @PostMapping
     public ResponseEntity<Scene> createScene(@RequestBody Scene scene){
         return ResponseEntity.ok().body(this.sceneService.createScene(scene));
     }

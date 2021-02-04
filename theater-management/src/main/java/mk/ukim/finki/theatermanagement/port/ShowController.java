@@ -1,16 +1,17 @@
 package mk.ukim.finki.theatermanagement.port;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mk.ukim.finki.theatermanagement.application.service.ShowService;
-import mk.ukim.finki.theatermanagement.domain.model.Scene;
-import mk.ukim.finki.theatermanagement.domain.model.SceneId;
 import mk.ukim.finki.theatermanagement.domain.model.Show;
-import mk.ukim.finki.theatermanagement.domain.repository.SceneRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -18,10 +19,10 @@ import java.util.List;
 @RequestMapping("/shows")
 public class ShowController {
     private final ShowService showService;
-    private final SceneRepository sceneRepository;
-    public ShowController(ShowService showService, SceneRepository sceneRepository) {
+    private final ObjectMapper objectMapper;
+    public ShowController(ShowService showService, ObjectMapper objectMapper) {
         this.showService = showService;
-        this.sceneRepository = sceneRepository;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/all")
@@ -44,11 +45,12 @@ public class ShowController {
 
     }
 
-    @PostMapping("/admin/create")
-    public ResponseEntity<Show> createShow(@RequestBody Show show) {
-        Scene s = sceneRepository.findById(new SceneId("66a715de-fc23-466b-925b-789ffb08192d")).orElseThrow(RuntimeException::new);
-        show.setScene(s);
-        return ResponseEntity.ok().body(this.showService.createShow(show));
+    @PostMapping(value = "/admin/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Show> createShow(@RequestPart String show, @RequestPart MultipartFile image) throws IOException {
+        objectMapper.registerModule(new JavaTimeModule());
+        Show s = objectMapper.readValue(show, Show.class);
+        s.setImage(image.getBytes());
+        return ResponseEntity.ok().body(this.showService.createShow(s));
     }
 
     @PutMapping("/admin/edit/{id}")

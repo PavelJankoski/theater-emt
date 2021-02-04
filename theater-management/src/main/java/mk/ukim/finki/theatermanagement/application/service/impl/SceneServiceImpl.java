@@ -4,12 +4,15 @@ import mk.ukim.finki.sharedkernel.config.KafkaTopics;
 import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 import mk.ukim.finki.sharedkernel.domain.dto.kafka.SceneSeatsDTO;
 import mk.ukim.finki.theatermanagement.application.service.SceneService;
+import mk.ukim.finki.theatermanagement.domain.exceptions.SceneNotFoundException;
 import mk.ukim.finki.theatermanagement.domain.model.Scene;
 import mk.ukim.finki.theatermanagement.domain.model.SceneId;
 import mk.ukim.finki.theatermanagement.domain.model.ShowId;
 import mk.ukim.finki.theatermanagement.domain.repository.SceneRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SceneServiceImpl implements SceneService {
@@ -23,6 +26,16 @@ public class SceneServiceImpl implements SceneService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+
+    @Override
+    public List<Scene> findAll() {
+        return sceneRepository.findByIsDeletedFalse();
+    }
+
+    @Override
+    public Scene findById(String id) {
+        return sceneRepository.findByIdAndIsDeletedFalse(new SceneId(id)).orElseThrow(SceneNotFoundException::new);
+    }
 
     @Override
     public Scene createScene(Scene scene) {

@@ -1,6 +1,7 @@
 package mk.ukim.finki.theatermanagement.domain.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
 import mk.ukim.finki.sharedkernel.domain.name.FullName;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "actors")
 @Getter
+@Setter
 public class Actor extends AbstractEntity<ActorId> {
     @EmbeddedId
     private ActorId id;

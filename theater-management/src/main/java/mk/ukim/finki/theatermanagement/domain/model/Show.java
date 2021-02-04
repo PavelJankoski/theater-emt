@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
 import mk.ukim.finki.sharedkernel.domain.financial.Money;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,6 +28,9 @@ public class Show extends AbstractEntity<ShowId> {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private String director;
+
     @Column(name = "set_designer")
     private String setDesigner;
 
@@ -43,6 +47,7 @@ public class Show extends AbstractEntity<ShowId> {
     private Boolean isDeleted = false;
 
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     private byte[] image;
 
     @ManyToMany(targetEntity = Actor.class, fetch = FetchType.EAGER)
