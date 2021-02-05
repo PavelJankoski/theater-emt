@@ -51,12 +51,11 @@ public class Money implements ValueObject {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Money money = (Money) obj;
-        return amount == money.amount &&
-                currency == money.currency;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money = (Money) o;
+        return amount == money.amount && currency == money.currency;
     }
 
     @Override

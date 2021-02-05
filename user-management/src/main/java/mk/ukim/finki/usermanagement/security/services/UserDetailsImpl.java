@@ -15,6 +15,7 @@ import java.util.Objects;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
+    private String id;
 
     private String email;
 
@@ -27,9 +28,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String name, String surname, String email, String password,
+    public UserDetailsImpl(String id, String name, String surname, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
 
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -42,6 +44,7 @@ public class UserDetailsImpl implements UserDetails {
         authorities.add(new SimpleGrantedAuthority(user.getRole().getName().name()));
 
         return new UserDetailsImpl(
+                user.getId().getId(),
                 user.getFullName().getFirstName(),
                 user.getFullName().getLastName(),
                 user.getEmail(),
@@ -59,6 +62,9 @@ public class UserDetailsImpl implements UserDetails {
         return password;
     }
 
+    public String getId(){
+        return id;
+    }
 
     public String getName(){
         return name;

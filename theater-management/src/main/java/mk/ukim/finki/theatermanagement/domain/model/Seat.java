@@ -20,12 +20,6 @@ public class Seat extends AbstractEntity<SeatId> {
     @Version
     private Long version;
 
-    @Column(name = "seat_row", nullable = false)
-    private int seatRow;
-
-    @Column(name = "seat_number", nullable = false)
-    private int seatNo;
-
     @ManyToOne
     @JoinColumn(name = "scene_id")
     @JsonIgnore

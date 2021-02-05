@@ -3,6 +3,7 @@ package mk.ukim.finki.theatermanagement.application.service.impl;
 import mk.ukim.finki.sharedkernel.config.KafkaTopics;
 import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 import mk.ukim.finki.sharedkernel.domain.dto.kafka.ReservationSeatsForShowDTO;
+import mk.ukim.finki.sharedkernel.domain.financial.Money;
 import mk.ukim.finki.theatermanagement.application.service.ShowService;
 import mk.ukim.finki.theatermanagement.domain.exceptions.ShowNotFoundException;
 import mk.ukim.finki.theatermanagement.domain.model.Show;
@@ -45,7 +46,7 @@ public class ShowServiceImpl implements ShowService {
 
     @Override
     public Show findShowById(String id) {
-        return this.showRepository.findById(new ShowId(id)).orElseThrow(ShowNotFoundException::new);
+        return this.showRepository.findByIdAndIsDeletedFalse(new ShowId(id)).orElseThrow(ShowNotFoundException::new);
     }
 
     @Override
@@ -64,24 +65,26 @@ public class ShowServiceImpl implements ShowService {
         return show;
     }
 
+    @Transactional
     @Override
     public Show updateShow(String id, Show show) {
         Show s = findShowById(id);
         s.setTitle(show.getTitle());
         s.setDescription(show.getDescription());
+        s.setDirector(show.getDirector());
         s.setCostumeDesigner(show.getCostumeDesigner());
         s.setSetDesigner(show.getSetDesigner());
         s.setDuration(show.getDuration());
         s.setFrom(show.getFrom());
-        s.setTicketPrice(show.getTicketPrice());
         s.setActors(show.getActors());
         s.setImage(show.getImage());
-        if(!s.getScene().getId().getId().equals(show.getScene().getId().getId())){
+        s.setTicketPrice(show.getTicketPrice());
+        String sceneId = show.getScene().getId().getId();
+        if(!s.getScene().getId().getId().equals(sceneId)){
             s.setScene(show.getScene());
             List<String> seatIds = s.getScene().getSeats().stream().map(sh -> sh.getId().getId()).collect(Collectors.toList());
             ReservationSeatsForShowDTO dto = new ReservationSeatsForShowDTO(s.getId().getId(), seatIds,s.getTicketPrice());
-            deleteShowKafkaTemplate.send(KafkaTopics.DELETE_SHOW, id);
-            kafkaTemplate.send(KafkaTopics.RESERVATION_SEATS_FOR_SHOW, dto);
+            kafkaTemplate.send(KafkaTopics.RESERVATION_EDIT_SHOW, dto);
         }
         return this.showRepository.save(s);
     }

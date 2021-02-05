@@ -1,6 +1,7 @@
 package mk.ukim.finki.reservation.domain.model;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
@@ -12,7 +13,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "reservations")
-@Getter
+@Data
 @NoArgsConstructor
 public class Reservation extends AbstractEntity<ReservationId> {
 
@@ -22,12 +23,18 @@ public class Reservation extends AbstractEntity<ReservationId> {
     @Version
     private Long version;
 
-    @Column(nullable = false)
+    @Column(name = "reservated_on")
     private Instant reservatedOn;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status",nullable = false)
     private ReservationStatus status;
+
+    @Column(name = "seat_number", nullable = false)
+    private int seatNo;
+
+    @Column(name = "seat_row", nullable = false)
+    private int seatRow;
 
     @Embedded
     @AttributeOverride(name="id",column = @Column(name="user_id"))
@@ -54,7 +61,7 @@ public class Reservation extends AbstractEntity<ReservationId> {
         this.userId = userId;
         this.showId = showId;
         this.seatId = seatId;
-        this.reservatedOn = Instant.now();
+        this.reservatedOn = null;
         this.status = ReservationStatus.NOT_RESERVED;
         this.price=price;
     }

@@ -28,20 +28,10 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public List<Seat> createSeatsForScene(@Payload Scene scene) {
         List<Seat> seats = new ArrayList<>();
-        for(int i = 1;i<scene.getCapacity()+1;i++){
+        for(int i = 0;i<scene.getCapacity();i++){
             Seat seat = new Seat();
-            if(i%scene.getSeatsInRow()!=0){
-                seat.setSeatNo(i%scene.getSeatsInRow());
-                seat.setSeatRow(((i/scene.getSeatsInRow()) + 1));
-            }
-            else{
-                seat.setSeatNo(scene.getSeatsInRow());
-                seat.setSeatRow((i/scene.getSeatsInRow()));
-            }
-
             seat.setScene(scene);
             seats.add(seat);
-
         }
         return this.seatRepository.saveAll(seats);
 

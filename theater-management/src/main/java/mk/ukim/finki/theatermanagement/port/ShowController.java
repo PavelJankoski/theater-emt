@@ -1,5 +1,6 @@
 package mk.ukim.finki.theatermanagement.port;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mk.ukim.finki.theatermanagement.application.service.ShowService;
@@ -44,18 +45,29 @@ public class ShowController {
         return showService.findAllPaged(pageNo,pageSize,sortBy);
 
     }
+    @GetMapping("/all/{showId}")
+    public ResponseEntity<Show> getShowById(@PathVariable String showId) {
+        return ResponseEntity.ok(this.showService.findShowById(showId));
+    }
 
     @PostMapping(value = "/admin/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Show> createShow(@RequestPart String show, @RequestPart MultipartFile image) throws IOException {
+    public ResponseEntity<Show> createShow(@RequestPart String show, @RequestPart(required = false) MultipartFile image) throws IOException {
         objectMapper.registerModule(new JavaTimeModule());
         Show s = objectMapper.readValue(show, Show.class);
-        s.setImage(image.getBytes());
+        if(image!=null) {
+            s.setImage(image.getBytes());
+        }
         return ResponseEntity.ok().body(this.showService.createShow(s));
     }
 
-    @PutMapping("/admin/edit/{id}")
-    public ResponseEntity<Show> updateShow(@PathVariable String id, @RequestBody Show show){
-        return ResponseEntity.ok().body(this.showService.updateShow(id, show));
+    @PutMapping(value = "/admin/edit/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Show> updateShow(@PathVariable String id, @RequestPart String show, @RequestPart(required = false) MultipartFile image) throws IOException {
+        objectMapper.registerModule(new JavaTimeModule());
+        Show s = objectMapper.readValue(show, Show.class);
+        if(image!=null) {
+            s.setImage(image.getBytes());
+        }
+        return ResponseEntity.ok().body(this.showService.updateShow(id, s));
     }
 
     @PutMapping("/admin/delete/{showId}")

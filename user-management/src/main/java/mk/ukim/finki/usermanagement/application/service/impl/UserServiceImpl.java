@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        return new JwtResponseDTO(jwt, userDetails.getName(), userDetails.getSurname(), userDetails.getUsername(), roles);
+        return new JwtResponseDTO(jwt, userDetails.getId(), userDetails.getName(), userDetails.getSurname(), userDetails.getUsername(), roles);
     }
 
     @Transactional

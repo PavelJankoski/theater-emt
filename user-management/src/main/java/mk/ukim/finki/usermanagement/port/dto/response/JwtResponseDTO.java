@@ -5,19 +5,24 @@ import java.util.List;
 public class JwtResponseDTO {
     private String accessToken;
     private String tokenType = "Bearer";
+    private String id;
     private String name;
     private String surname;
     private String email;
     private List<String> roles;
 
-    public JwtResponseDTO(String accessToken,String name, String surname, String email, List<String> roles) {
+    public JwtResponseDTO(String accessToken,String id, String name, String surname, String email, List<String> roles) {
         this.accessToken = accessToken;
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.roles = roles;
     }
 
+    public String getId() {
+        return id;
+    }
     public String getAccessToken() {
         return accessToken;
     }
