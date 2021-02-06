@@ -40,7 +40,7 @@ public class RatingServiceImpl implements RatingService {
 
 
     @KafkaListener(topics = KafkaTopics.DELETE_SHOW,
-            groupId = "delete_show_group",
+            groupId = "delete_rating_group",
             containerFactory = "deleteKafkaListenerContainerFactory")
     @Override
     public void deleteRatings(String id) {
