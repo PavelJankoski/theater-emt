@@ -22,7 +22,7 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping("/{showId}")
+    @GetMapping("/all/{showId}")
     public ResponseEntity<List<Reservation>> getReservationsForShow(@PathVariable String showId) {
         return ResponseEntity.ok(reservationService.findAllReservationsForShow(new ShowId(showId)));
     }

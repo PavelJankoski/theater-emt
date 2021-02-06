@@ -1,4 +1,4 @@
-package mk.ukim.finki.reservation.config.kafka;
+package mk.ukim.finki.rating.kafka;
 
 import mk.ukim.finki.sharedkernel.domain.dto.kafka.ReservationSeatsForShowDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -18,36 +18,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-
-    @Bean
-    public Map<String, Object> consumerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "reservation_group");
-        return props;
-    }
-
-    //Create reservations when show is created
-    @Bean
-    public ConsumerFactory<String, ReservationSeatsForShowDTO> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(
-                consumerConfigs(),
-                new StringDeserializer(),
-                new JsonDeserializer<>(ReservationSeatsForShowDTO.class));
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ReservationSeatsForShowDTO> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ReservationSeatsForShowDTO> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
-    }
-
-
-    //Delete reservations when show is deleted
+    //Delete ratings when show is deleted
     @Bean
     public ConsumerFactory<String, String> deleteShowConsumerFactory() {
         Map<String, Object> config = new HashMap<>();
@@ -62,7 +33,7 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> deleteShowKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, String> deleteKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(deleteShowConsumerFactory());
