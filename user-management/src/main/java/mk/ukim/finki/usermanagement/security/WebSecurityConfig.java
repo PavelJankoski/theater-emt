@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ratings-api/ratings/avg/**").permitAll()
                 .antMatchers("/ratings-api/ratings/auth/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/reservations-api/reservations/all/**").permitAll()
-                .antMatchers("/reservations-api/reservations/make-reservation").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/reservations-api/reservations/auth/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/theater-api/shows/all/**").permitAll()
                 .antMatchers("/theater-api/shows/admin/**").hasRole("ADMIN")
                 .antMatchers("/theater-api/scenes/**").hasRole("ADMIN")

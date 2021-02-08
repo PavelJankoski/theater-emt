@@ -8,9 +8,11 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, ReservationId> {
-    List<Reservation> findAllByShowIdAndUserId(ShowId showId, UserId userId);
+    List<Reservation> findAllByUserId(UserId userId);
 
     List<Reservation> findAllByShowIdOrderById(ShowId showId);
 
     Reservation findFirstByShowIdAndSeatId(ShowId showId, SeatId seatId);
+
+    Reservation findFirstBySeatIdAndUserId(SeatId seatId, UserId userId);
 }

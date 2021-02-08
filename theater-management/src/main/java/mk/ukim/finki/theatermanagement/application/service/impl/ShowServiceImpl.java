@@ -41,7 +41,7 @@ public class ShowServiceImpl implements ShowService {
 
     @Override
     public List<Show> findAll() {
-        return this.showRepository.findAllByIsDeletedOrderByFrom(false);
+        return this.showRepository.findAllByIsDeletedFalseOrderByFrom();
     }
 
     @Override

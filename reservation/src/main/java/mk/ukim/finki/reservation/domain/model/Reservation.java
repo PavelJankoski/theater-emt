@@ -2,8 +2,8 @@ package mk.ukim.finki.reservation.domain.model;
 
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.reservation.domain.enums.ReservationStatus;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
 import mk.ukim.finki.sharedkernel.domain.base.DomainObjectId;
 import mk.ukim.finki.sharedkernel.domain.financial.Money;

@@ -15,7 +15,11 @@ public interface ReservationService {
 
     void deleteReservationsForShow(String id);
 
+    List<Reservation> findAllReservationsForUser(String userId);
+
     List<Reservation> findAllReservationsForShow(ShowId id);
 
     List<Reservation> makeReservation(SelectedSeatsByUserDTO dto);
+
+    Reservation removeUserFromReservation(String reservationId);
 }

@@ -27,8 +27,18 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.findAllReservationsForShow(new ShowId(showId)));
     }
 
-    @PutMapping("/make-reservation")
+    @GetMapping("/auth/by-user/{userId}")
+    public ResponseEntity<List<Reservation>> getAllReservationsFromUser(@PathVariable String userId) {
+        return ResponseEntity.ok(this.reservationService.findAllReservationsForUser(userId));
+    }
+
+    @PutMapping("/auth/make-reservation")
     public ResponseEntity<List<Reservation>> makeReservation(@RequestBody SelectedSeatsByUserDTO dto) {
         return ResponseEntity.ok(this.reservationService.makeReservation(dto));
+    }
+
+    @PutMapping("/auth/cancel-reservation/{reservationId}")
+    public ResponseEntity<Reservation> cancelReservation(@PathVariable String reservationId) {
+        return ResponseEntity.ok(this.reservationService.removeUserFromReservation(reservationId));
     }
 }

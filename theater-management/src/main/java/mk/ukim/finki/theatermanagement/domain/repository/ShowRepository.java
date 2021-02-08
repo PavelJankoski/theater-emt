@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ShowRepository extends PagingAndSortingRepository<Show, ShowId> {
     Optional<Show> findByIdAndIsDeletedFalse(ShowId id);
 
-    List<Show> findAllByIsDeletedOrderByFrom(Boolean isDeleted);
+    List<Show> findAllByIsDeletedFalseOrderByFrom();
 
     List<Show> findByTitleContainingIgnoreCaseAndIsDeletedFalseOrderByFrom(String title);
 

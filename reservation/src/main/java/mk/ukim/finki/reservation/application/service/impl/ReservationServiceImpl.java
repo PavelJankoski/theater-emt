@@ -1,6 +1,8 @@
 package mk.ukim.finki.reservation.application.service.impl;
 
 import mk.ukim.finki.reservation.application.service.ReservationService;
+import mk.ukim.finki.reservation.domain.enums.ReservationStatus;
+import mk.ukim.finki.reservation.domain.exceptions.ReservationNotFoundException;
 import mk.ukim.finki.reservation.domain.model.*;
 import mk.ukim.finki.reservation.domain.repository.ReservationRepository;
 import mk.ukim.finki.reservation.port.dto.request.SelectedSeatsByUserDTO;
@@ -17,10 +19,10 @@ import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
-    private final ReservationRepository repository;
+    private final ReservationRepository reservationRepository;
 
-    public ReservationServiceImpl(ReservationRepository repository) {
-        this.repository = repository;
+    public ReservationServiceImpl(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
     }
 
     @KafkaListener(topics = KafkaTopics.RESERVATION_SEATS_FOR_SHOW,
@@ -33,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
             Reservation reservation = new Reservation(null, new ShowId(dto.getShowId()), new SeatId(seatId),dto.getPrice());
             reservations.add(reservation);
         }
-        return repository.saveAll(reservations);
+        return reservationRepository.saveAll(reservations);
     }
 
     @Transactional
@@ -42,13 +44,13 @@ public class ReservationServiceImpl implements ReservationService {
             containerFactory = "kafkaListenerContainerFactory")
     @Override
     public List<Reservation> editShowReservations(ReservationSeatsForShowDTO dto) {
-        this.repository.deleteAll(this.repository.findAllByShowIdOrderById(new ShowId(dto.getShowId())));
+        this.reservationRepository.deleteAll(this.reservationRepository.findAllByShowIdOrderById(new ShowId(dto.getShowId())));
         List<Reservation> reservations = new ArrayList<>();
         for(String seatId : dto.getSeatIds()) {
             Reservation reservation = new Reservation(null, new ShowId(dto.getShowId()), new SeatId(seatId),dto.getPrice());
             reservations.add(reservation);
         }
-        return repository.saveAll(reservations);
+        return reservationRepository.saveAll(reservations);
     }
 
     @KafkaListener(topics = KafkaTopics.DELETE_SHOW,
@@ -56,12 +58,17 @@ public class ReservationServiceImpl implements ReservationService {
             containerFactory = "deleteShowKafkaListenerContainerFactory")
     @Override
     public void deleteReservationsForShow(String id) {
-        this.repository.deleteAll(this.repository.findAllByShowIdOrderById(new ShowId(id)));
+        this.reservationRepository.deleteAll(this.reservationRepository.findAllByShowIdOrderById(new ShowId(id)));
+    }
+
+    @Override
+    public List<Reservation> findAllReservationsForUser(String userId) {
+        return this.reservationRepository.findAllByUserId(new UserId(userId));
     }
 
     @Override
     public List<Reservation> findAllReservationsForShow(ShowId id) {
-        return this.repository.findAllByShowIdOrderById(id);
+        return this.reservationRepository.findAllByShowIdOrderById(id);
     }
 
     @Override
@@ -69,7 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservations = new ArrayList<>();
         for(String seat : dto.getSelectedSeats()) {
             String [] parts = seat.split(";");
-            Reservation r = this.repository.findFirstByShowIdAndSeatId(new ShowId(dto.getShowId()), new SeatId(parts[0]));
+            Reservation r = this.reservationRepository.findFirstByShowIdAndSeatId(new ShowId(dto.getShowId()), new SeatId(parts[0]));
             r.setReservatedOn(Instant.now());
             r.setSeatRow(Integer.parseInt(parts[1]));
             r.setSeatNo(Integer.parseInt(parts[2]));
@@ -78,7 +85,17 @@ public class ReservationServiceImpl implements ReservationService {
             r.setPrice(dto.getTicketPrice());
             reservations.add(r);
         }
-        return this.repository.saveAll(reservations);
+        return this.reservationRepository.saveAll(reservations);
+    }
+
+    @Override
+    public Reservation removeUserFromReservation(String reservationId) {
+        Reservation r = reservationRepository.findById(new ReservationId(reservationId)).orElseThrow(ReservationNotFoundException::new);
+        r.setUserId(null);
+        r.setSeatRow(0);
+        r.setSeatNo(0);
+        r.setStatus(ReservationStatus.CANCELLED);
+        return this.reservationRepository.save(r);
     }
 
 
